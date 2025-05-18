@@ -26,13 +26,7 @@ export class CustomersComponent implements OnInit{
     this.searchFormGroup = this.fb.group({
       keyword : this.fb.control('')
     })
-    this.customers = this.customerService.getCustomers().pipe(
-      catchError((error) => {
-        this.errorMessage = error.message;
-        console.error('Error fetching customers:', error);
-        return throwError(() => error);
-      })
-    );
+    this.handleSearchCystomers();
   }
 
   handleSearchCystomers() {
