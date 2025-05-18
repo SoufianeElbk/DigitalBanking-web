@@ -17,10 +17,13 @@ export class CustomersComponent implements OnInit{
   }
 
   ngOnInit(): void {
-      this.http.get('http://localhost:8080/customers').subscribe(data => {
-        this.customers = data;
-      }, error => {
-        console.error(error)
+      this.http.get('http://localhost:8080/customers').subscribe({
+        next: (data) => {
+          this.customers = data;
+        },
+        error: (error) => {
+          console.error('Error fetching customers:', error);
+        }
       })
     }
 }
