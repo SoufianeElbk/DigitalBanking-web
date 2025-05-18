@@ -17,4 +17,8 @@ export class CustomerService {
   public searchCustomers(keyword : string) : Observable<Array<Customer>> {
     return this.http.get<Array<Customer>>('http://localhost:8080/customers/search?keyword=' + keyword);
   }
+
+  public saveCustomers(customer : Customer) : Observable<Customer> {
+    return this.http.post<Customer>('http://localhost:8080/customers', customer);
+  }
 }
