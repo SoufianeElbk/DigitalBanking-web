@@ -8,10 +8,12 @@
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
           <input type="text" id="name" formControlName="name" class="form-control" placeholder="Enter customer name" />
+<!--          <span class="alert alert-danger" *ngIf="newCustomerFormGroup.get('name')?.errors?.['required']">Name is required</span>-->
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter customer email" />
+<!--          <span class="alert alert-danger" *ngIf="newCustomerFormGroup.get('email')?.errors?.['required']">Email is required</span>-->
         </div>
         <button [disabled]="!newCustomerFormGroup.valid" type="submit" class="btn btn-primary">Save</button>
       </form>

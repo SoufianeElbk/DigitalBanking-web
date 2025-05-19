@@ -40,4 +40,20 @@ export class CustomersComponent implements OnInit{
     );
 
   }
+
+  handleDeleteCustomer(customer: Customer) {
+    let conf = confirm("Are you   sure you want to delete this customer?");
+    if (conf) {
+      this.customerService.deleteCustomer(customer.id).subscribe({
+        next: (data) => {
+          this.handleSearchCystomers();
+        },
+        error: (error) => {
+          alert("Error while deleting customer");
+          console.error('Error deleting customer:', error);
+        }
+      });
+    }
+
+  }
 }
