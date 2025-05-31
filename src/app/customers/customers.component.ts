@@ -5,6 +5,7 @@ import { CustomerService } from '../services/customer.service';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Customer } from '../model/customer.model';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-customers',
@@ -19,17 +20,17 @@ export class CustomersComponent implements OnInit{
   errorMessage! : string;
   searchFormGroup! : FormGroup;
 
-  constructor(private customerService: CustomerService, private fb : FormBuilder) {
+  constructor(private customerService: CustomerService, private fb : FormBuilder, private router: Router) {
   }
 
   ngOnInit(): void {
     this.searchFormGroup = this.fb.group({
       keyword : this.fb.control('')
     })
-    this.handleSearchCystomers();
+    this.handleSearchCustomers();
   }
 
-  handleSearchCystomers() {
+  handleSearchCustomers() {
     let keyword = this.searchFormGroup?.value.keyword;
     this.customers = this.customerService.searchCustomers(keyword).pipe(
       catchError((error) => {
@@ -38,7 +39,6 @@ export class CustomersComponent implements OnInit{
         return throwError(() => error);
       })
     );
-
   }
 
   handleDeleteCustomer(customer: Customer) {
@@ -46,7 +46,7 @@ export class CustomersComponent implements OnInit{
     if (conf) {
       this.customerService.deleteCustomer(customer.id).subscribe({
         next: (data) => {
-          this.handleSearchCystomers();
+          this.handleSearchCustomers();
         },
         error: (error) => {
           alert("Error while deleting customer");
@@ -55,5 +55,13 @@ export class CustomersComponent implements OnInit{
       });
     }
 
+  }
+
+  handleEditCustomer(customer: Customer) {
+    this.router.navigateByUrl(`/edit-customer/${customer.id}`);
+  }
+
+  handleCustomerAccounts(customer: Customer) {
+    this.router.navigateByUrl(`/customer-accounts/${customer.id}`, {state : {customer}});
   }
 }

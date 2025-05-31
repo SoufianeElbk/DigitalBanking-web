@@ -1,0 +1,13 @@
+/* Styles spécifiques pour le composant edit-customer */
+.card {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.btn {
+  min-width: 100px;
+}
+
+.invalid-feedback {
+  display: block;
+}

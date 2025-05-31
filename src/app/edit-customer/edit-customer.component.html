@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Edit Customer</h5>
+    </div>
+    <div class="card-body">
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      
+      <form [formGroup]="editCustomerFormGroup" (ngSubmit)="handleUpdateCustomer()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            class="form-control" 
+            placeholder="Enter customer name"
+            [class.is-invalid]="editCustomerFormGroup.get('name')?.invalid && editCustomerFormGroup.get('name')?.touched" />
+          <div class="invalid-feedback" *ngIf="editCustomerFormGroup.get('name')?.invalid && editCustomerFormGroup.get('name')?.touched">
+            <span *ngIf="editCustomerFormGroup.get('name')?.errors?.['required']">Name is required</span>
+            <span *ngIf="editCustomerFormGroup.get('name')?.errors?.['minlength']">Name must be at least 4 characters</span>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            class="form-control" 
+            placeholder="Enter customer email"
+            [class.is-invalid]="editCustomerFormGroup.get('email')?.invalid && editCustomerFormGroup.get('email')?.touched" />
+          <div class="invalid-feedback" *ngIf="editCustomerFormGroup.get('email')?.invalid && editCustomerFormGroup.get('email')?.touched">
+            <span *ngIf="editCustomerFormGroup.get('email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="editCustomerFormGroup.get('email')?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <button 
+            [disabled]="!editCustomerFormGroup.valid" 
+            type="submit" 
+            class="btn btn-primary">
+            <i class="bi bi-check-circle"></i> Update
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-secondary"
+            (click)="handleCancel()">
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -8,7 +8,6 @@ import {Router} from '@angular/router';
   selector: 'app-new-customer',
   imports: [
     ReactiveFormsModule,
-    NgIf
   ],
   templateUrl: './new-customer.component.html',
   styleUrl: './new-customer.component.css'

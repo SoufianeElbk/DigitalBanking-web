@@ -1,1 +1,139 @@
-<p>accounts works!</p>
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Accounts</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="searchFormGroup" (ngSubmit)="handleSearchAccounts()">
+        <div class="input-group mb-3">
+          <input type="text" id="searchInput" formControlName="accountId" class="form-control" placeholder="Enter account number"/>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+        </div>
+      </form>
+      <ng-container *ngIf="accounts | async as accountDetails">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label>Account Id : <strong>{{accountDetails.accountId}}</strong></label>
+          </div>
+          <div class="col-md-6">
+            <label>Balance : <strong>{{accountDetails.balance | number : '1.2-2'}}</strong></label>
+          </div>
+        </div>
+
+        <!-- Bouton pour afficher/masquer le formulaire d'opération -->
+        <div class="mb-3">
+          <button
+            type="button"
+            class="btn btn-success"
+            (click)="toggleOperationForm()">
+            <i class="bi bi-plus-circle"></i>
+            {{ showOperationForm ? 'Hide Operation Form' : 'Add New Operation' }}
+          </button>
+        </div>
+
+        <!-- Formulaire d'opération -->
+        <div *ngIf="showOperationForm" class="card mb-4">
+          <div class="card-header">
+            <h6 class="card-title mb-0">New Operation</h6>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="operationFormGroup" (ngSubmit)="handleOperation()">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="operationType" class="form-label">Operation Type</label>
+                    <select
+                      id="operationType"
+                      formControlName="operationType"
+                      class="form-select">
+                      <option value="DEBIT">Debit</option>
+                      <option value="CREDIT">Credit</option>
+                      <option value="TRANSFER">Transfer</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label for="amount" class="form-label">Amount</label>
+                    <input
+                      type="number"
+                      id="amount"
+                      formControlName="amount"
+                      class="form-control"
+                      placeholder="Enter amount"
+                      step="0.01"
+                      min="0.01"
+                      [class.is-invalid]="operationFormGroup.get('amount')?.invalid && operationFormGroup.get('amount')?.touched" />
+                    <div class="invalid-feedback" *ngIf="operationFormGroup.get('amount')?.invalid && operationFormGroup.get('amount')?.touched">
+                      <span *ngIf="operationFormGroup.get('amount')?.errors?.['required']">Amount is required</span>
+                      <span *ngIf="operationFormGroup.get('amount')?.errors?.['min']">Amount must be greater than 0</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4" *ngIf="isTransferOperation()">
+                  <div class="mb-3">
+                    <label for="accountDestination" class="form-label">Destination Account</label>
+                    <input
+                      type="text"
+                      id="accountDestination"
+                      formControlName="accountDestination"
+                      class="form-control"
+                      placeholder="Enter destination account" />
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input
+                  type="text"
+                  id="description"
+                  formControlName="description"
+                  class="form-control"
+                  placeholder="Enter operation description"
+                  [class.is-invalid]="operationFormGroup.get('description')?.invalid && operationFormGroup.get('description')?.touched" />
+                <div class="invalid-feedback" *ngIf="operationFormGroup.get('description')?.invalid && operationFormGroup.get('description')?.touched">
+                  <span *ngIf="operationFormGroup.get('description')?.errors?.['required']">Description is required</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button
+                  [disabled]="!operationFormGroup.valid"
+                  type="submit"
+                  class="btn btn-primary">
+                  <i class="bi bi-check-circle"></i> Execute Operation
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  (click)="operationFormGroup.reset(); operationFormGroup.patchValue({ operationType: 'DEBIT' })">
+                  <i class="bi bi-arrow-clockwise"></i> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Date</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let accountOperation of accountDetails.accountOperationDTOS">
+              <td>{{ accountOperation.id }}</td>
+              <td>{{ accountOperation.operationDate | date : 'dd/MM/yyyy HH:mm'}}</td>
+              <td>{{ accountOperation.amount | number : '1.2-2'}}</td>
+              <td>{{ accountOperation.type }}</td>
+              <td>{{ accountOperation.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
